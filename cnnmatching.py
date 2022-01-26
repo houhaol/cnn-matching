@@ -1,4 +1,5 @@
 import argparse
+from asyncio import wrap_future
 import cv2
 import numpy as np
 import imageio
@@ -8,15 +9,15 @@ import matplotlib.pyplot as plt
 import time
 from skimage import measure
 from skimage import transform
+from utlis import img_wrap, image_addon
 
 #time count
 start = time.perf_counter()
 
 _RESIDUAL_THRESHOLD = 30
 #Test1nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8
-imgfile1 = 'df-ms-data/1/df-googleearth-1k-20091227.jpg'
-imgfile2 = 'df-ms-data/1/df-googleearth-1k-20181029.jpg'
-imgfile1 = 'df-ms-data/1/df-uav-sar-500.jpg'
+imgfile1 = '/home/houhao/workspace/bim_view_o3d/ros_data/validation2/BIM_perspective/images/pt3_color.png'
+imgfile2 = '/home/houhao/workspace/bim_view_o3d/ros_data/validation2/rs_images/pt3.jpg'
 
 
 start = time.perf_counter()
@@ -69,11 +70,16 @@ locations_1_to_use = np.array(locations_1_to_use)
 locations_2_to_use = np.array(locations_2_to_use)
 
 # Perform geometric verification using RANSAC.
-_, inliers = measure.ransac((locations_1_to_use, locations_2_to_use),
+model_ransac, inliers = measure.ransac((locations_1_to_use, locations_2_to_use),
                           transform.AffineTransform,
                           min_samples=3,
                           residual_threshold=_RESIDUAL_THRESHOLD,
                           max_trials=1000)
+
+""" image wrap for veficaition purpose """
+""" wrap_img = img_wrap(image2, model_ransac)
+img_compose = image_addon(image1, wrap_img*255, alpha=0.5)
+cv2.imwrite('wrap.png', img_compose) """
 
 print('Found %d inliers' % sum(inliers))
 
