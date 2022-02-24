@@ -34,7 +34,6 @@ def plot_matches(ax, image1, image2, keypoints1, keypoints2, matches,
         the other, ``'vertical'``.
 
     """
-
     #image1 = img_as_float(image1)
     #image2 = img_as_float(image2)
 
